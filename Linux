@@ -1,0 +1,70 @@
+1. What is the command to list the contents of a direcory, line by line and ordered by size ascending in human readable format?
+
+ls -laShr <absolute path of the directory>
+Ex: ls -laShr /etc/
+
+2. How would you add a DNS server to a network interface in Linux?
+
+Create an interface with name ifcfg-<interfacename> under /etc/sysconfig/network-scripts
+
+ex: 
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+IP address: 192.168.0.100
+Netmask: 255.255.255.0
+Hostname: client1.example.com
+Domain name: example.com
+Gateway: 192.168.0.1
+DNS Server 1: 8.8.8.8
+DNS Server 2: 4.4.4.4
+
+Save and exit
+Then restart network service to affect the changes from the config file
+systemctl restart network
+
+Then run dig <hostname> to check the dns server ip details
+
+ex: dig client1.example.com
+
+3.If the DNS server you've just added is not reachable, how can you get any particular hostname to resolve locally?
+
+We need to setup a loocal DNS by adding the ip of the host to /etc/hosts file
+Ex: vi /etc/hosts
+Domain example.com
+192.168.0.1 client1.example.com
+save and exit
+
+Then try to ping the host - ping client1.example.com
+
+
+
+4.How would you check for SELinux related errors?
+
+Check if selinux is enabled or not - getenforce
+Check /var/log/audit/audit.log file for more information about selinux deniel messages
+query Audit logs - ausearch -m AVC,USER_AVC,SELINUX_ERR,USER_SELINUX_ERR -ts recent
+If there are no matches, check if the Audit daemon is running
+In case auditd is running, but there are no matches in the output of ausearch, check messages provided by the systemd Journal: journalctl -t setroubleshoot
+If SELinux is active and the Audit daemon is not running on the system, then search for certain SELinux messages in the output of the dmesg command: dmesg | grep -i -e type=1300 -e type=1400
+If SELinux is still blocking switch to permissive mode - setenforce 0 (command line)
+To change SELinux status permanently change SELINUX=permissive in  /etc/selinux/config file
+
+
+
+5. Write the commands to add 30GB disk space to a logical volume named "docker" that belongs to a logical group named "docker-group".
+
+lvextend -L +30G /dev/mapper/vg_docker-group-docker
+resize2fs /dev/mapper/vg_docker-group-docker
+If there is no sufficient diskspace on volume group then we need to extend the volume group first with help of a physical volume, then we can extend lvm
+Check the size now - df -h command
+
+6. In the root of this repository, create a Bash script called "listit.sh", when executed, this script must do the following (in order):
+Create a file called directories.list that contains the directory names only of the current directory.
+#########################################################################################
+Add a line at the beginning of the directories.list file that reads "line one's line".  -- Didn't understand this question
+##########################################################################################
+Output the first three lines of directories.list on the console.
+Accept an integer parameter when executed and repeat the previous question's output x amount of times based on the parameter provided at execution.
+
+Created file "listit.sh"
+
