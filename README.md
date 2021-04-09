@@ -55,4 +55,8 @@ For the questions below, please make use of the OpenShift CLI (oc) where applica
     * The volume can be mounted as read-write by more than one node.
 # General
 * How would you ensure any change made to this Dockerfile is source controlled, approved, tested and deployed. Explain which tools you will use as if this was going into a production environment.
+We can accomplish this via CI/CD automation.
+We can write the yaml code to which branch a build need to be triggered and when it needs to deployed.
+We can use GIT & jenkins here to automate the deployment or else aws/azure devops
+
 * Commit and push your changes.
